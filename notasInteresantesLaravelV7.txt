@@ -1,0 +1,208 @@
+######################################### 
+namespace App;
+#### PROYECTO DESDE 0 LARAVEL V.7.28#####
+#########################################
+
+Paso 1: Crera proyecto
+    => Crear proyecto si se tiene laravel/intaller, este comando genera proyecto de laravel de la ultima version disponible
+     -> laravel new nombreProyecto
+
+    => Crera proyecto si no se instalo laravel, a de mas con este puedes especificar la version de laravel a instalar
+     -> composer create-project --prefer-dist laravel/larevel=versionAinstalar.* nombreProyecto
+
+Paso 2: Crear base de datos
+    => Hacerlo desde el gestor que se acomode en este caso sqlyog
+
+Paso 3: Configurar archivo .env
+    => Escribir las credenciales de la base de datos
+
+Paso 4: Agregar Laravel/ui
+    => Al instalar ui, esto nos dara la autenticacion que viene en laravel, si arroja un error tal vez sea por la version, entonces coloca version a ui
+     -> composer require laravel/ui=2.2.*
+
+Paso 5: Completar  ui
+    => Terminar con la instalacion de laravel ui
+     -> php artisan ui:auth
+
+Paso 6: Agregar Vuejs
+    => Agregar con ui, lo que es vue
+     -> php artisan ui vue
+Paso 7: Correr npm
+    => Refrescar la nuevas dependencias que se han instalado
+     -> npm i
+
+Paso 8: Correr el proyecto
+    => Ejecutar servidor local para laravel
+     -> php artisan serve
+
+#########################################################################
+####################### Instalar tailwind ###############################
+#########################################################################
+    Este proyecto se hizo con tailwind en lugar de bootstrap
+
+Paso 1: Instalar tailwind con npm
+    => Instalar dependencias
+     -> npm install --save-dev tailwindcss laravel-mix-tailwind
+
+Paso 2: Ejecutar tailwind
+    => Terminar la intsalacion de tailwind
+     -> npx tailwindcss init
+
+Paso 3: Inportar tailwind
+    => Agregar la nueva dependecia de tailwind
+     -> En el archivo webpack.mix.js importar y decirle que ejecute la oja de estilos de tailwind
+
+Paso 4: Inportar utilidades de tailwind
+    => Quitar el archivo de variables, en lugar de importar boostrap se cambia a las utilidades de tailwind en resources/sass/app.scss
+     -> @tailwind base;
+     -> @tailwind components;
+     -> @tailwind utilities;
+
+Paso 5: Corrrer un watch
+    => Cuando ejecuta un watch, si arroja un error es probable que sea el archivo que se creo al intalar tailwind y pasa porque busca
+       un archivo llamado tailwind.js y se crea como tailwind.config.js, solo quitar al nombre el .config y deberia correr con normalidad
+     -> npm run watch
+#########################################################################
+############# FIN DE LA INSTALACION DE tailwind #########################
+#########################################################################
+
+Paso 9: Instalar idioma español
+    => Se continua con pasos de laravel y se ahora se instalara el paquete de español para textos que bienen en ingles por ejemplo validaciones
+     -> composer require laraveles/spanish
+
+Paso  10: Terminar instalacion del idioma
+    => Terminar intslacion de español
+     -> php artisan laraveles:install-lang
+
+Paso 11: Configurar archivo para idioma
+    => Para que tome el español debe configurar el archivo config/app.php
+     -> En la variable locale quitar el "en" por "es"
+
+Paso 12: Correr la primera migracion
+    => Ejuctar comando de migracion para que se creen las primeras tablas, si marca error agrega ,191 en la migracion y campo que marco el error
+     -> php artisan migrate
+
+Paso 13: Configurar Email
+    => Configurar archivo .env para mandar email de confirmacion y pueda acceder a la pagina
+     -> En este caso se ocupa mailtrap para dev y el env solo falta usuario, password y adress lo de mas ya esta por default
+
+Paso 14: Indicar que se requiere una verificacion de email
+    => Indicar al modelo en este caso User que se requiere el email de verificacion
+     -> Despues de extends se escrcibe implements MustVerifyEmail
+
+Paso 15: En rutas indicar la verificacion
+    => En archivo routes/web.php en Auth se le indica que todo lo protegido del proyecto(paginas) se debera verificar, entre los parentesis escribir:
+     -> ["verify"=>true]
+
+Paso 16: Proteger controlador
+    => Cuando intente cargar el archivo principal en este caso HomeController, el usuario para poder acceder debera de estar verificado con 
+        el correo que se le manda
+     -> En controlador donde carga el middleware convertir en array y aun lado de auth poner verified mas o menos asi (['auth','verified'])
+
+Paso 17: Incorporar funcionalidades
+    => Aqui ya se comienza a crear controladores, modelos, vistas, etc. Estos ya serian de programacion propia y no como lo anterior, que solo es
+       utilizar lo que laravel ya trae por de fect para que en el tema del login sea mucho mas seguro, entonces ahora crearemos un modelo y le
+       ataremos un controlador de tipo resource
+     -> php artisan make:model Vacante -mcr
+
+Paso 18: Cambiar la redireccion del home
+    => Si se quiere cambiar la redirecion por default de home se debe editar el archivo app/Providers/RouteServiceProvider.php
+     -> Cambiar public const HOME = '/home'; por public const HOME = '/nombreDlaRuta';
+
+Paso 19: Proteger controladores
+    => Para que las url's no se puedan ver, si no esta logueado o aun no ha verificado su registro mediante el correo que se le envio al usuario
+     -> Crear un public function __construct(){ $this->middleware(["auth","verified"]); }
+
+Paso 20: Recomendacion de FK
+    => Para crear una llave foranea, nombra el id de relacion con el nombreTabla(Migracion)_id
+     -> $table->foreignId("nombreTabla_id")->constrained()->OnDelete();
+
+Paso 21: Crear un Seed
+    => Un Seeder sirve para llenar tablas con datos por default
+     -> php artisan make:seeder NombreSeed
+     -> El seed creado lo encuentras en database/seeds/nombreSeed.php
+     -> Llenar un seed con esta sintaxis y repetir la cantidad de veces que se ocupa para hacer un registro
+        DB::table("categorias")->insert([
+            "campoUno"=>"primerRegistro",
+            "created_at"=>Carbon::now(),
+            "updated_at"=>Carbon::now(),
+        ]);
+     -> Despues en database/seeds/DatabaseSeeder.php descomenta esa linea y quedaria algo asi $this->call(NombreSeed::class); y asi ejecutara
+        los seeders que hayas creado
+
+Paso 22: Craar un link para imagenes
+    => Cuando se trabaja con subida de archivos laravel, los gurada en una ruta que no es accesible por tema de seguridad, lo que hace en casos asi
+       es crear un link con la funcion misma de laravel
+     -> php artisan storage:link
+     
+Paso 23: Relacion de tablas, con modelos
+    => Para extraer datos de una relacion de tablas, primero en el modelo "padre"(modelo o tabla que manda su id a otra tabla).
+     -> public function nombreFuncion(){ return $this->hasMany(nombreDelModeloRelacionado::class); }
+
+Paso 24: Agregar un filable
+    => Este paso y el 23 se hacen para poder insertar en la bd desde formulario y el filable son los campos que podran ser insertados sin esto
+        marca error esto ocupando modelos ya que no se le indica que tales campos tienen permiso de ser insertados. Se hace en el modelo a guardar
+     -> protected $fillable = ['campo1','campo2'];
+
+Paso 25: Guardar en la DB
+    => En el controlador se escribe como la linea de abajo,
+     -> auth()->user()->vacantes()->create(["titulo"=> $data["titulo"],]);
+
+Paso 26: Hacer grupo de rutas
+    => En este caso se ocupara para decirle cuales seran las rutas protegidas osea las que llevan un middleware  para que sea mas facil de manejar
+     -> Route::group(["middleware"=>["auth","verified"]],function(){
+         //Rutas que estaran en este grupo para que sean protegidas
+     });
+     
+Paso 27: Crear una notificacion
+    => Crea un archivo en la carpeta app/Notifications/nombreArchivo.php para ahi recibir parametros y poder manekarlos por ejemplo en correos de notificacion
+     -> php artisan make:notification nombreNotificacion
+
+Paso 28: Notificaciones manejadas con DB's
+    => Con este comando se crea una tabla de notificaciones, despues debes hacer un migrate para que se refleje la tabla
+     -> php artisan notifications:table
+
+Paso 29: controlador tipo invoke
+    => Tipo de controlador que no requiere un metodo, osea que se instancia directamente
+
+Paso 30: Instalar sweetAlert2 para vue
+    => Sweet alert sirve para mostrar mensajes tipo alerta, pero con n buen diseño en este caso se instalara para vue.js
+     -> npm i vue-sweetalert2
+
+Paso 31: Crear un policy
+    => Los policis hacen mas segura la applicacion, el que se hizo en este proyecto es para que solo el usuario creador se el unico que vea sus vacantes publicadas
+     -> php artisan make:policy NombrePolicy -m NombreDelModelo
+
+Paso 32: Crear un Provider
+    => No esta claro su funcionamiento
+     -> php artisan make:provider NombreProvider
+
+Paso 33: Cuidado con las rutas
+    => El orden en como estan escritas resulta importante poruqe puede arrojar un error y este no es muy descriptivo
+     -> Importante revisar esto, puedes hacer una prueba en el archivo web.php donde dice error orden de rutas, recomendacion
+        las rutas que tengan comodines escribelas debajo de las otras para evitarte este error
+
+Paso 34: 
+Paso 35: 
+Paso 36: 
+Paso 37: 
+Paso 38: 
+Paso 39: 
+Paso 40: 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+Paso : 
+
