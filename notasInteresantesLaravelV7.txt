@@ -1,5 +1,4 @@
-######################################### 
-namespace App;
+#########################################
 #### PROYECTO DESDE 0 LARAVEL V.7.28#####
 #########################################
 
@@ -178,31 +177,59 @@ Paso 32: Crear un Provider
      -> php artisan make:provider NombreProvider
 
 Paso 33: Cuidado con las rutas
-    => El orden en como estan escritas resulta importante poruqe puede arrojar un error y este no es muy descriptivo
+    => El orden en como estan escritas resulta importante porque puede arrojar un error y este no es muy descriptivo
      -> Importante revisar esto, puedes hacer una prueba en el archivo web.php donde dice error orden de rutas, recomendacion
         las rutas que tengan comodines escribelas debajo de las otras para evitarte este error
 
-Paso 34: 
-Paso 35: 
-Paso 36: 
-Paso 37: 
-Paso 38: 
-Paso 39: 
-Paso 40: 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
-Paso : 
+Paso 34: Rutas para API's
+    => Empezando, las rutas de api van en otro archivo de routing que se encuentra en la misma carpeta que el de web
+     -> routes/api.php
 
+Paso 35: Crear rutas API's
+    => Se pueden crear de la manera tradicional, como se escriben en el de rutas web,
+     -> Ejemplo: Route::get("/categorias","APIController@categorias")->name("categorias"); 
+     *NOTA:* Recuerda, para acceder a estas rutas siempre debe comenzar por /api/rutaCreada. Ejemplo: http://127.0.0.1:8000/api/categorias
+
+############################################
+############# NOTAS PARA VUE.js ############
+############################################
+    NOTA::  Este archivo se comento trabajando con laravel 7 y tailwind pero se le incluyeron los dos ultios pasos para trabajar con rutas api,
+            tiene notas de vue.js, api y vue son del proyecto de establecimientos que se trabajo con laravel y vue.js. Esto para tener solo un archivo
+
+Paso 1: Colocar componentes dentro de un componentes
+    => Se deben importar en la parte de script para que puedan ser usados ademas dentro de export se coloca una "propiedad" llamada components
+       Ademas si se escribio un componente con dos palabra juntas pero con su primera letra en mayuscula para poder usarlo en vue lo que se debe
+        hacer es todo en minusculas y las palabras se separaran por un guion medio
+     -> Ejemplo de script 
+        <template> 
+            <categoria-cafe></categoria-cafe>
+        </template>
+
+        <script>
+            import CategoriaCafe from "./CategoriaCafe";
+            export default {
+                components:{
+                    CategoriaCafe
+                }
+            }
+        </script>
+
+Paso 2: Instalar Vuex.js --parte 1
+    => Vuex es para manejar el state de la aplicacion, lo que entiendo es que centraliza los datos literalmente, osea vuex te permite manejar
+        la informacion en uno "solo archivo"
+     -> npm i --save-dev vuex
+
+Paso 3:  Instalar Vuex.js --parte 2
+    => Terminada la instalacion, se debe crear una carpeta llama store en resources/js y dentro de la carpeta se creo un archivo js llamado index
+        donde se debe importar vue y vuex
+     -> Sin mas notas...
+
+Paso 4: Instalar vue router --parte 1
+    => Vue es js por lo que no existe archivo php o html cargado para mandar a otra vista, se podria decir que lo de vue se hac een memoria
+        esa es la diferencia de por ejemplo html o php que pueden ser consultados y mostrar
+     -> npm i vue-router
+
+Paso 5: Instalar vue router --parte 2
+    => Terminada la instalacion, debemos crear una carpeta llamada router en resources/js y dentro de esta crear un archivo de preferencia nombrarlo
+        index.js
+     -> Sin mas notas...
